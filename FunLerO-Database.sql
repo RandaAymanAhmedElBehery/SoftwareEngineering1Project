@@ -33,7 +33,7 @@ deleted bool,
 
 PRIMARY KEY (crsCode,gameName),
 Foreign Key(crsCode) References Courses(crsCode),
-foreign key(email) References Teachers(email) 
+foreign key(teacherEmail) References Teachers(email) 
 
 );
 
@@ -99,8 +99,7 @@ create table Comments
     gameName varchar(50),
     crsCode varchar(50),
     userEmail varChar(50),
-    foreign key(gameName) references Games(gameName),
-    foreign key(crsCode) references Courses(crsCode)
+  Foreign Key(crsCode,gameName) References Games(crsCode,gameName)
 );
 
 create table Collaborators
@@ -109,8 +108,7 @@ create table Collaborators
     crsCode varchar(50),
     email varChar(50),
     primary key (gameName , crsCode , email),
-    foreign key(gameName) references Games(gameName),
-    foreign key(crsCode) references Courses(crsCode),
+Foreign Key(crsCode,gameName) References Games(crsCode,gameName),
     foreign key(email) References teachers(email) 
 
 );
@@ -131,18 +129,29 @@ create table Notifications
 	studentEmail varChar(50),
     gameName varchar(50),
     crsCode varchar(50),
-    foreign key(gameName) references Games(gameName),
-    foreign key(crsCode) references Courses(crsCode),
-	foreign key(studentEmail) References students(email),
+   Foreign Key(crsCode,gameName) References Games(crsCode,gameName),
+   foreign key(studentEmail) References students(email),
     foreign key(teacherEmail) References teachers(email) 
 );
 
-create table Commands
+create table Commands   
 (
-	changeType	varchar(50),
-	details varchar(100),
+	changeType	varchar(20),	/* execute/ undo */
+	commandType varchar(20),       /* addCollaborator / Cancel */
     gameName varchar(50),
     crsCode varchar(50),
-    foreign key(gameName) references Games(gameName),
-    foreign key(crsCode) references Courses(crsCode)
+    email varchar (50),
+    changeID int auto_increment ,
+    primary key(changeID),
+    Foreign Key(crsCode,gameName) References Games(crsCode,gameName),
+	foreign key(email) References teachers(email) 
 );
+
+
+select * from students;
+select * from Teachers;
+select * from Courses;
+select * from Games;
+
+select * from commands;
+
