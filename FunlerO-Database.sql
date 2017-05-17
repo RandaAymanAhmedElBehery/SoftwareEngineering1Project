@@ -28,9 +28,13 @@ description  VARCHAR (500),
 diffcultyLevel varchar (10),
 Newschema varchar (100),
 crsCode varchar (50),
+teacherEmail varchar(50),
+deleted bool,
 
 PRIMARY KEY (crsCode,gameName),
-Foreign Key(crsCode) References Courses(crsCode)
+Foreign Key(crsCode) References Courses(crsCode),
+foreign key(teacherEmail) References Teachers(email) 
+
 );
 
 create table Students 
@@ -89,13 +93,65 @@ primary key (gameName),
 foreign key(email) References Students(email) 
 );
 
+create table Comments 
+(
+	commentText varchar(200),
+    gameName varchar(50),
+    crsCode varchar(50),
+    userEmail varChar(50),
+  Foreign Key(crsCode,gameName) References Games(crsCode,gameName)
+);
+
+create table Collaborators
+(
+	gameName varchar(50),
+    crsCode varchar(50),
+    email varChar(50),
+    primary key (gameName , crsCode , email),
+Foreign Key(crsCode,gameName) References Games(crsCode,gameName),
+    foreign key(email) References teachers(email) 
+
+);
+
+create table StudentCrs
+(
+	crsCode varchar(50),
+    email varChar(50),
+	foreign key(crsCode) references Courses(crsCode),
+    foreign key(email) References students(email),
+    primary key (email, crsCode) 
+);
+
+create table Notifications
+(
+	notificationText varchar(200),
+	teacherEmail varChar(50),
+	studentEmail varChar(50),
+    gameName varchar(50),
+    crsCode varchar(50),
+   Foreign Key(crsCode,gameName) References Games(crsCode,gameName),
+   foreign key(studentEmail) References students(email),
+    foreign key(teacherEmail) References teachers(email) 
+);
+
+create table Commands   
+(
+	changeType	varchar(20),	/* execute/ undo */
+	commandType varchar(20),       /* addCollaborator / Cancel */
+    gameName varchar(50),
+    crsCode varchar(50),
+    email varchar (50),
+    changeID int auto_increment ,
+    primary key(changeID),
+    Foreign Key(crsCode,gameName) References Games(crsCode,gameName),
+	foreign key(email) References teachers(email) 
+);
 
 
-insert into Teachers values ("Randa","Randa.6111@hotmail.com","123456" , 'f');
-select * from teachers;
-insert into Courses values("course1", "crs1 description" , "crs1", "123456");
+select * from students;
+select * from Teachers;
+select * from Courses;
+select * from Games;
 
-    select * from games ;
-    select * from questions ;
-    select * from levels ;
-    select * from Students;
+select * from commands;
+
